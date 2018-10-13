@@ -1,0 +1,41 @@
+{
+  "name": "cover-me",
+  "version": "1.0.0",
+  "description": "An app that builds out a cover letter using a template and the options input my the user",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vikramraja1995/cover-me.git"
+  },
+  "author": "Vikram Raja",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/vikramraja1995/cover-me/issues"
+  },
+  "homepage": "https://github.com/vikramraja1995/cover-me#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "mongoose": "^5.3.3",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2"
+  },
+  "devDependencies": {
+    "babel-core": "^6.23.1",
+    "babel-loader": "^6.3.2",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.23.0",
+    "eslint": "^5.5.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^3.0.1",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-prettier": "^2.6.2",
+    "eslint-plugin-react": "^7.11.1",
+    "nodemon": "^1.18.4",
+    "prettier": "^1.14.2",
+    "webpack": "^2.2.1"
+  }
+}
