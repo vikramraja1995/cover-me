@@ -48,6 +48,33 @@ class App extends React.Component {
     });
   }
 
+  populateIndustry() {
+    const industries = [
+      'Web Development',
+      'Internet of Things',
+      'Mobile Development',
+      'Virtual Reality',
+      'Biochemical'
+    ];
+    return industries.map((industry, i) => {
+      return (
+        <div className="form-check">
+          <input
+            className="form-check-input"
+            type="radio"
+            name="industry"
+            id={`industry-${i}`}
+            value={industry}
+            onClick={() => this.setState({ industry })}
+          />
+          <label className="form-check-label" htmlFor={`industry-${i}`}>
+            {industry}
+          </label>
+        </div>
+      );
+    });
+  }
+
   render() {
     return (
       <div>
@@ -167,6 +194,15 @@ class App extends React.Component {
                   </label>
                 </div>
               </div>
+            </div>
+          </fieldset>
+
+          {/*  Industry options */}
+          <fieldset className="form-group">
+            <div className="row">
+              <legend className="col-form-label col-sm-2 pt-0">Industry</legend>
+              {/*  Industries */}
+              <div className="col-sm-2">{this.populateIndustry()}</div>
             </div>
           </fieldset>
 
