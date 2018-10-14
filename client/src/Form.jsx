@@ -4,8 +4,8 @@ class Form extends React.Component {
   constructor() {
     super();
     this.state = {
-      company: '[Company]',
-      greeting: 'Hiring Manager',
+      company: '',
+      greeting: '',
       addresseeName: '',
       role: '',
       industry: '',
@@ -13,20 +13,13 @@ class Form extends React.Component {
       database: ''
     };
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.onCompanyNameChange = this.onCompanyNameChange.bind(this);
-  }
-
-  // Sets company state to [Company] if the input is empty so it looks neat in the greeting option
-  onCompanyNameChange(e) {
-    const text = e.target.value === '' ? '[Company]' : e.target.value;
-    this.setState({ company: text });
   }
 
   populateRoles() {
     const roles = ['Software', 'Javascript', 'Full-Stack', 'Front-End', 'Back-End'];
     return roles.map((role, i) => {
       return (
-        <div className="form-check">
+        <div key={`role-${i}`} className="form-check">
           <input
             className="form-check-input"
             type="radio"
@@ -53,7 +46,7 @@ class Form extends React.Component {
     ];
     return industries.map((industry, i) => {
       return (
-        <div className="form-check">
+        <div key={`industry-${i}`} className="form-check">
           <input
             className="form-check-input"
             type="radio"
@@ -74,7 +67,7 @@ class Form extends React.Component {
     const frontEndFrameworks = ['React', 'Angular', 'Vue', 'AngularJS', 'Backbone'];
     return frontEndFrameworks.map((frontEndFramework, i) => {
       return (
-        <div className="form-check">
+        <div key={`frontEndFramework-${i}`} className="form-check">
           <input
             className="form-check-input"
             type="radio"
@@ -95,7 +88,7 @@ class Form extends React.Component {
     const databases = ['PostgreSQL', 'Cassandra', 'MySQL', 'MongoDB', 'Redis', 'MariaDB'];
     return databases.map((database, i) => {
       return (
-        <div className="form-check">
+        <div key={`database-${i}`} className="form-check">
           <input
             className="form-check-input"
             type="radio"
@@ -118,6 +111,7 @@ class Form extends React.Component {
   }
 
   render() {
+    const { company } = this.state;
     return (
       <div>
         <form action="">
@@ -132,7 +126,7 @@ class Form extends React.Component {
                 className="form-control"
                 id="companyName"
                 placeholder="Company Name"
-                onChange={this.onCompanyNameChange}
+                onChange={e => this.setState({ company: e.target.value })}
               />
             </div>
           </div>
@@ -150,7 +144,6 @@ class Form extends React.Component {
                     name="greeting"
                     id="hiringManager"
                     value="Hiring Manager"
-                    defaultChecked
                     onClick={() => this.setState({ greeting: 'Hiring Manager' })}
                   />
                   <label className="form-check-label" htmlFor="hiringManager">
@@ -168,7 +161,7 @@ class Form extends React.Component {
                     onClick={() => this.setState({ greeting: 'team' })}
                   />
                   <label className="form-check-label" htmlFor="companyTeam">
-                    {this.state.company}
+                    {company === '' ? '[Company]' : company}
                     's Team
                   </label>
                 </div>
