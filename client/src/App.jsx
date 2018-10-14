@@ -6,10 +6,20 @@ class App extends React.Component {
     this.state = {
       company: '[Company]',
       greeting: 'Hiring Manager',
-      addresseeName: ''
+      addresseeName: '',
+      role: '',
+      industry: '',
+      frontEndFramework: '',
+      database: ''
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onCompanyNameChange = this.onCompanyNameChange.bind(this);
+  }
+
+  // Sets company state to [Company] if the input is empty so it looks neat in the greeting option
+  onCompanyNameChange(e) {
+    const text = e.target.value === '' ? '[Company]' : e.target.value;
+    this.setState({ company: text });
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -17,10 +27,25 @@ class App extends React.Component {
     event.preventDefault();
   }
 
-  // Sets company state to [Company] if the input is empty so it looks neat in the greeting option
-  onCompanyNameChange(e) {
-    const text = e.target.value === '' ? '[Company]' : e.target.value;
-    this.setState({ company: text });
+  populateRoles() {
+    const roles = ['Software', 'Javascript', 'Full-Stack', 'Front-End', 'Back-End'];
+    return roles.map((role, i) => {
+      return (
+        <div className="form-check">
+          <input
+            className="form-check-input"
+            type="radio"
+            name="role"
+            id={`role-${i}`}
+            value={role}
+            onClick={() => this.setState({ role })}
+          />
+          <label className="form-check-label" htmlFor={`role-${i}`}>
+            {role}
+          </label>
+        </div>
+      );
+    });
   }
 
   render() {
@@ -95,6 +120,50 @@ class App extends React.Component {
                       onChange={e => this.setState({ addresseeName: e.target.value })}
                       onClick={() => document.getElementById('customName').click()}
                     />
+                  </label>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+          {/*  Role options */}
+          <fieldset className="form-group">
+            <div className="row">
+              <legend className="col-form-label col-sm-2 pt-0">Role 1</legend>
+              {/*  Roles */}
+              <div className="col-sm-2">{this.populateRoles()}</div>
+            </div>
+          </fieldset>
+
+          <fieldset className="form-group">
+            <div className="row">
+              <legend className="col-form-label col-sm-2 pt-0">Role 2</legend>
+              {/*  Role appends */}
+              <div className="col-sm-2">
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="role-append"
+                    id="developer"
+                    value="developer"
+                    onClick={() => this.setState({ roleAppend: 'Developer' })}
+                  />
+                  <label className="form-check-label" htmlFor="developer">
+                    Developer
+                  </label>
+                </div>
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="role-append"
+                    id="engineer"
+                    value="engineer"
+                    onClick={() => this.setState({ roleAppend: 'Engineer' })}
+                  />
+                  <label className="form-check-label" htmlFor="engineer">
+                    Engineer
                   </label>
                 </div>
               </div>
