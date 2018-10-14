@@ -9,11 +9,18 @@ class App extends React.Component {
       addresseeName: ''
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.onCompanyNameChange = this.onCompanyNameChange.bind(this);
   }
 
   // eslint-disable-next-line class-methods-use-this
   handleSubmit(event) {
     event.preventDefault();
+  }
+
+  // Sets company state to [Company] if the input is empty so it looks neat in the greeting option
+  onCompanyNameChange(e) {
+    const text = e.target.value === '' ? '[Company]' : e.target.value;
+    this.setState({ company: text });
   }
 
   render() {
@@ -31,7 +38,7 @@ class App extends React.Component {
                 className="form-control"
                 id="companyName"
                 placeholder="Company Name"
-                onChange={e => this.setState({ company: e.target.value })}
+                onChange={this.onCompanyNameChange}
               />
             </div>
           </div>
