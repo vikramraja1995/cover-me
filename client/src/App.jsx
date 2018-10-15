@@ -1,6 +1,7 @@
 import React from 'react';
 import Form from './Form';
 import Letter from './Letter';
+import Navigation from './Navigation';
 
 class App extends React.Component {
   constructor() {
@@ -35,6 +36,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
+        <Navigation />
         {this.state.error === '' ? (
           ''
         ) : (
