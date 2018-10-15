@@ -4,12 +4,12 @@ const envVars = require('../env_variables');
 
 // Set up Mongoose Connection
 mongoose.connect(
-  envVars.mongoIP,
+  `mongodb://${envVars.mongoIP}/cover-me`,
   { useNewUrlParser: true }
 );
 const db = mongoose.connection;
 mongoose.Promise = Promise;
-db.on('error', () => console.error('Connection Error:'));
+db.on('error', e => console.error('Connection Error:', e));
 /* --------------------------------------------------------------------------------------------- */
 
 // Set up Schemas
@@ -22,12 +22,15 @@ const userSchema = new mongoose.Schema(
   {
     name: String,
     username: String,
-    coverLetters: [new mongoose.Schema.Types.Mixed()]
+    coverLetters: [mongoose.Schema.Types.Mixed]
   },
   { strict: false }
 );
 
-const templateSchema = new mongoose.Schema.Types.Mixed();
+const templateSchema = new mongoose.Schema({
+  name: String,
+  template: String
+});
 
 /* --------------------------------------------------------------------------------------------- */
 
@@ -52,7 +55,7 @@ const addUser = (name, username) => {
     name,
     username
   });
-  return user.save(); // catch error
+  return user.save();
 };
 
 const addFieldToUser = (username, field, value) => {};
