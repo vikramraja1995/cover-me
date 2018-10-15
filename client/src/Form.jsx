@@ -8,10 +8,10 @@ class Form extends React.Component {
       greeting: '',
       addresseeName: '',
       role: '',
+      roleAppend: '',
       industry: '',
       frontEndFramework: '',
-      database: '',
-      missing: ''
+      database: ''
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -126,6 +126,7 @@ class Form extends React.Component {
       greeting,
       addresseeName,
       role,
+      roleAppend,
       industry,
       frontEndFramework,
       database
@@ -138,7 +139,9 @@ class Form extends React.Component {
     } else if (greeting === 'custom' && addresseeName === '') {
       missing = 'Addressee name';
     } else if (role === '') {
-      missing = 'Role';
+      missing = 'Role 1';
+    } else if (roleAppend === '') {
+      missing = 'Role 2';
     } else if (industry === '') {
       missing = 'Industry';
     } else if (frontEndFramework === '') {
@@ -147,18 +150,19 @@ class Form extends React.Component {
       missing = 'Database';
     }
     if (missing !== '') {
-      this.setState({ missing });
+      this.props.errorMessage('Please choose your ' + missing);
       return;
     }
     let fixedGreeting = greeting;
     if (greeting === 'team') {
       fixedGreeting = `${company}'s  Team`;
+    } else if (greeting === 'custom') {
+      fixedGreeting = addresseeName;
     }
     this.props.generateLetter({
       company,
-      fixedGreeting,
-      addresseeName,
-      role,
+      greeting: fixedGreeting,
+      role: `${role} ${roleAppend}`,
       industry,
       frontEndFramework,
       database
@@ -168,22 +172,14 @@ class Form extends React.Component {
   render() {
     const { company } = this.state;
     return (
-      <div>
-        {this.state.missing === '' ? (
-          ''
-        ) : (
-          <div className="alert alert-danger" role="alert">
-            Please choose your {this.state.missing}
-          </div>
-        )}
-
+      <div className="border-right border-light">
         <form action="">
           {/*  Company's name */}
           <div className="form-group row">
-            <label htmlFor="companyName" className="col-sm-2 bmd-label-floating">
+            <label htmlFor="companyName" className="col-sm-5 bmd-label-floating">
               Company Name
             </label>
-            <div className="col-sm-2">
+            <div className="col-sm-5">
               <input
                 type="text"
                 className="form-control"
@@ -196,9 +192,9 @@ class Form extends React.Component {
           {/*  Greeting options */}
           <fieldset className="form-group">
             <div className="row">
-              <legend className="col-form-label col-sm-2 pt-0">Greeting</legend>
+              <legend className="col-form-label col-sm-3 pt-0">Greeting</legend>
               {/*  Hiring Manager greeting */}
-              <div className="col-sm-10">
+              <div className="col-sm-5">
                 <div className="form-check">
                   <label className="form-check-label" htmlFor="hiringManager">
                     Hiring Manager
@@ -263,17 +259,17 @@ class Form extends React.Component {
           {/*  Role options */}
           <fieldset className="form-group">
             <div className="row">
-              <legend className="col-form-label col-sm-2 pt-0">Role 1</legend>
+              <legend className="col-form-label col-sm-3 pt-0">Role 1</legend>
               {/*  Roles */}
-              <div className="col-sm-2">{this.populateRoles()}</div>
+              <div className="col-sm-5">{this.populateRoles()}</div>
             </div>
           </fieldset>
 
           <fieldset className="form-group">
             <div className="row">
-              <legend className="col-form-label col-sm-2 pt-0">Role 2</legend>
+              <legend className="col-form-label col-sm-3 pt-0">Role 2</legend>
               {/*  Role appends */}
-              <div className="col-sm-2">
+              <div className="col-sm-5">
                 <div className="form-check">
                   <label className="form-check-label" htmlFor="developer">
                     Developer
@@ -313,33 +309,33 @@ class Form extends React.Component {
           {/*  Industry options */}
           <fieldset className="form-group">
             <div className="row">
-              <legend className="col-form-label col-sm-2 pt-0">Industry</legend>
+              <legend className="col-form-label col-sm-3 pt-0">Industry</legend>
               {/*  Industries */}
-              <div className="col-sm-2">{this.populateIndustry()}</div>
+              <div className="col-sm-5">{this.populateIndustry()}</div>
             </div>
           </fieldset>
 
           {/*  Front-End Framework options */}
           <fieldset className="form-group">
             <div className="row">
-              <legend className="col-form-label col-sm-2 pt-0">Front-End Framework</legend>
+              <legend className="col-form-label col-sm-3 pt-0">Front-End Framework</legend>
               {/*  Front-End Frameworks */}
-              <div className="col-sm-2">{this.populateFrontEndFrameworks()}</div>
+              <div className="col-sm-5">{this.populateFrontEndFrameworks()}</div>
             </div>
           </fieldset>
 
           {/*  Database options */}
           <fieldset className="form-group">
             <div className="row">
-              <legend className="col-form-label col-sm-2 pt-0">Database</legend>
+              <legend className="col-form-label col-sm-3 pt-0">Database</legend>
               {/*  Database */}
-              <div className="col-sm-2">{this.populateDatabases()}</div>
+              <div className="col-sm-5">{this.populateDatabases()}</div>
             </div>
           </fieldset>
 
           {/*  Submit Button */}
           <div className="form-group row">
-            <div className="col-sm-10">
+            <div className="col-sm-5">
               <button type="submit" className="btn btn-primary" onClick={this.handleSubmit}>
                 Generate
               </button>
