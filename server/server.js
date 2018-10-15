@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const db = require('../database/mongodb');
 
 // Set up Express server and JSON parsing of API requests
 const app = express();
@@ -22,6 +23,17 @@ app.use((req, res, next) => {
 // Serve up front end files
 app.use(express.static('client/dist'));
 app.use(bodyParser.json());
+
+// Get the template from DB, fill it with user data, save the cover letter in the db and return it
+app.post('/api/generate', (req, res) => {
+  db.getTemplate().then(data => {
+    let { template } = data;
+    for (let prop in req.body) {
+      template = template.replace(`{${prop}}`, req.body[prop]);
+    }
+    res.send({ letter: template });
+  });
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on ${port}...`));
