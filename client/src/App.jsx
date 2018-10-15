@@ -2,16 +2,23 @@ import React from 'react';
 import Form from './Form';
 import Letter from './Letter';
 import Navigation from './Navigation';
+import Login from './Login';
 
 class App extends React.Component {
   constructor() {
     super();
     this.state = {
       letter: '',
-      error: ''
+      error: '',
+      auth: false
     };
+    this.loginUser = this.loginUser.bind(this);
     this.generateLetter = this.generateLetter.bind(this);
     this.errorMessage = this.errorMessage.bind(this);
+  }
+
+  loginUser() {
+    this.setState({ auth: true });
   }
 
   generateLetter(data) {
@@ -34,6 +41,9 @@ class App extends React.Component {
   }
 
   render() {
+    if (this.state.auth === false) {
+      return <Login loginUser={this.loginUser} />;
+    }
     return (
       <div>
         <Navigation />
