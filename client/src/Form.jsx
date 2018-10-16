@@ -16,6 +16,7 @@ class Form extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  // TODO: Look into merging all the population functions into one
   populateRoles() {
     const roles = ['Software', 'Javascript', 'Full-Stack', 'Front-End', 'Back-End'];
     return roles.map((role, i) => {
@@ -176,14 +177,12 @@ class Form extends React.Component {
         <form action="">
           {/*  Company's name */}
           <div className="form-group row">
-            <label htmlFor="companyName" className="col-sm-5 bmd-label-floating">
-              Company Name
-            </label>
             <div className="col-sm-5">
               <input
                 type="text"
                 className="form-control"
                 id="companyName"
+                placeholder="Company's Name"
                 onChange={e => this.setState({ company: e.target.value })}
               />
             </div>
@@ -265,6 +264,7 @@ class Form extends React.Component {
             </div>
           </fieldset>
 
+          {/* TODO: Populate this using a loop */}
           <fieldset className="form-group">
             <div className="row">
               <legend className="col-form-label col-sm-3 pt-0">Role 2</legend>
