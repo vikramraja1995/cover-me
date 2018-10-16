@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 const envVars = require('../env_variables');
 /* --------------------------------------------------------------------------------------------- */
+const saltRounds = 8; // Set the bcrypt work factor
 
 // Set up Mongoose Connection
 mongoose.connect(
@@ -22,6 +24,8 @@ const userSchema = new mongoose.Schema(
   {
     name: String,
     username: String,
+    email: String,
+    password: String,
     coverLetters: [mongoose.Schema.Types.Mixed]
   },
   { strict: false }
@@ -31,7 +35,16 @@ const templateSchema = new mongoose.Schema({
   name: String,
   template: String
 });
+/* --------------------------------------------------------------------------------------------- */
 
+// Set up password hashing and comparing functions
+userSchema.methods.generateHash = (password, callback) => {
+  bcrypt.hash(password, saltRounds, callback);
+};
+
+userSchema.methods.validatePassword = (password, hash, callback) => {
+  bcrypt.compare(password, hash, callback);
+};
 /* --------------------------------------------------------------------------------------------- */
 
 // Set up Models
@@ -71,5 +84,6 @@ module.exports = {
   getCoverLetterList,
   getCoverLetter,
   addUser,
-  getTemplate
+  getTemplate,
+  User
 };
