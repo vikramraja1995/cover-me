@@ -33,6 +33,10 @@ class Login extends React.Component {
                   id="email"
                   onChange={e => this.setState({ email: e.target.value })}
                 />
+                <small id="emailHelp" className="form-text text-muted">
+                  We'll never share your email with anyone else (But we'll spam the hell out of it
+                  like every other website).
+                </small>
               </div>
             </div>
             {/* Password */}
