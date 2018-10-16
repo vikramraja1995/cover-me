@@ -160,6 +160,7 @@ class Form extends React.Component {
     } else if (greeting === 'custom') {
       fixedGreeting = addresseeName;
     }
+    window.scrollTo(0, 0);
     this.props.generateLetter({
       company,
       greeting: fixedGreeting,
