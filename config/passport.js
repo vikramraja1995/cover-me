@@ -48,9 +48,9 @@ passport.use(
         }
         const newUser = new User();
         newUser.email = email;
-        newUser.generateHash(password, (err, res) => {
-          if (err) {
-            throw new Error(err);
+        newUser.generateHash(password, (err1, res) => {
+          if (err1) {
+            throw new Error(err1);
           }
           newUser.password = res;
           newUser
@@ -58,7 +58,7 @@ passport.use(
             .then(savedUser => {
               done(null, savedUser);
             })
-            .catch(error => console.err(error));
+            .catch(err2 => console.err(err2));
         });
       });
     }
@@ -66,9 +66,11 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
-  done(null, user);
+  done(null, user.id);
 });
 
-passport.deserializeUser((user, done) => {
-  done(null, user);
+passport.deserializeUser((id, done) => {
+  User.findById(id, (err, user) => {
+    done(err, user);
+  });
 });
