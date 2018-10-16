@@ -12,9 +12,7 @@ class Login extends React.Component {
 
   handleLogin(event) {
     event.preventDefault();
-    if (this.state.email === 'test@test.com' && this.state.password === '1') {
-      this.props.loginUser();
-    }
+    this.props.loginUser(this.state);
   }
 
   render() {
@@ -22,6 +20,7 @@ class Login extends React.Component {
       <div className="card mx-auto col-sm-4 border">
         <div className="card-body">
           <form>
+            <h3>Login</h3>
             {/* Email Address */}
             <div className="form-group row">
               <label htmlFor="email" className="bmd-label-floating col-sm-8">
@@ -36,7 +35,6 @@ class Login extends React.Component {
                 />
               </div>
             </div>
-
             {/* Password */}
             <div className="form-group row">
               <label htmlFor="password" className="bmd-label-floating col-sm-8">
@@ -51,7 +49,6 @@ class Login extends React.Component {
                 />
               </div>
             </div>
-
             {/*  Login Button */}
             <div className="form-group row">
               <div className="col-sm-5">
