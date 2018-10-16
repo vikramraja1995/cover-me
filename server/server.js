@@ -1,5 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const passport = require('passport');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 const db = require('../database/mongodb');
 
 // Set up Express server and JSON parsing of API requests
@@ -23,6 +26,47 @@ app.use((req, res, next) => {
 // Serve up front end files
 app.use(express.static('client/dist'));
 app.use(bodyParser.json());
+app.use(
+  session({
+    secret: 'cover_me',
+    resave: true,
+    saveUninitialized: true,
+    store: new MongoStore({ mongooseConnection: db.db }),
+    cookie: {
+      secure: false,
+      maxAge: 86400000 // 1 day
+    }
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+require('../config/passport');
+
+// Handle login requests
+app.post('/auth/login', passport.authenticate('local-login'), (req, res) => {
+  res.sendStatus(200);
+});
+
+app.post('/auth/register', passport.authenticate('local-signup'), (req, res) => {
+  res.sendStatus(200);
+});
+
+const ensureLoggedIn = () => (req, res, next) => {
+  // isAuthenticated is set by `deserializeUser()`
+  if (!req.isAuthenticated || !req.isAuthenticated()) {
+    res.status(401).send({
+      success: false,
+      message: 'You need to be authenticated to access this page!'
+    });
+  } else {
+    next();
+  }
+};
+
+app.get('/auth/check', ensureLoggedIn(), (req, res, next) => {
+  res.send({ success: true, message: 'You are authenticated' });
+  next();
+});
 
 // Get the template from DB, fill it with user data, save the cover letter in the db and return it
 app.post('/api/generate', (req, res) => {
