@@ -10,15 +10,33 @@ class App extends React.Component {
     this.state = {
       letter: '',
       error: '',
-      auth: false
+      auth: null
     };
     this.loginUser = this.loginUser.bind(this);
     this.generateLetter = this.generateLetter.bind(this);
     this.errorMessage = this.errorMessage.bind(this);
+    fetch('/auth/check').then(res => {
+      if (res.status === 200) {
+        this.setState({ auth: true });
+      } else {
+        this.setState({ auth: false });
+      }
+    });
   }
 
-  loginUser() {
-    this.setState({ auth: true });
+  loginUser(data) {
+    fetch('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: { 'Content-Type': 'application/json' }
+    }).then(res => {
+      if (res.status === 200) {
+        this.errorMessage('');
+        this.setState({ auth: true });
+      } else {
+        this.errorMessage('The password or email you entered is incorrect!');
+      }
+    });
   }
 
   generateLetter(data) {
@@ -41,29 +59,36 @@ class App extends React.Component {
   }
 
   render() {
-    if (this.state.auth === false) {
-      return <Login loginUser={this.loginUser} />;
-    }
+    const { error, letter, auth } = this.state;
     return (
       <div>
-        <Navigation />
-        {this.state.error === '' ? (
+        {error === '' ? (
           ''
         ) : (
           <div className="alert alert-danger" role="alert">
-            {this.state.error}
+            {/* TODO: Remove lower margin, look into fading in, stick to top */}
+            {error}
           </div>
         )}
-        <div className="container">
-          <div className="row">
-            <div className="col">
-              <Form generateLetter={this.generateLetter} errorMessage={this.errorMessage} />
-            </div>
-            <div className="col">
-              <Letter letter={this.state.letter} />
+        {auth === false ? (
+          <Login loginUser={this.loginUser} />
+        ) : auth === true ? (
+          <div>
+            <Navigation />
+            <div className="container">
+              <div className="row">
+                <div className="col">
+                  <Form generateLetter={this.generateLetter} errorMessage={this.errorMessage} />
+                </div>
+                <div className="col">
+                  <Letter letter={letter} />
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          ''
+        )}
       </div>
     );
   }
