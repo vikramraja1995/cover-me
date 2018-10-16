@@ -85,5 +85,6 @@ module.exports = {
   getCoverLetter,
   addUser,
   getTemplate,
-  User
+  User,
+  db
 };
