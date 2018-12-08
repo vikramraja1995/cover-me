@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import shortId from 'shortid';
 
 class Form extends React.Component {
   constructor() {
@@ -11,7 +13,7 @@ class Form extends React.Component {
       roleAppend: '',
       industry: '',
       frontEndFramework: '',
-      database: ''
+      database: '',
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -19,26 +21,24 @@ class Form extends React.Component {
   // TODO: Look into merging all the population functions into one
   populateRoles() {
     const roles = ['Software', 'Javascript', 'Full-Stack', 'Front-End', 'Back-End'];
-    return roles.map((role, i) => {
-      return (
-        <div key={`role-${i}`} className="form-check">
-          <label className="form-check-label" htmlFor={`role-${i}`}>
-            {role}
-            <input
-              className="form-check-input"
-              type="radio"
-              name="role"
-              id={`role-${i}`}
-              value={role}
-              onClick={() => this.setState({ role })}
-            />
-            <span className="circle">
-              <span className="check" />
-            </span>
-          </label>
-        </div>
-      );
-    });
+    return roles.map((role, i) => (
+      <div key={shortId.generate()} className="form-check">
+        <label className="form-check-label" htmlFor={`role-${i}`}>
+          {role}
+          <input
+            className="form-check-input"
+            type="radio"
+            name="role"
+            id={`role-${i}`}
+            value={role}
+            onClick={() => this.setState({ role })}
+          />
+          <span className="circle">
+            <span className="check" />
+          </span>
+        </label>
+      </div>
+    ));
   }
 
   populateIndustry() {
@@ -47,81 +47,76 @@ class Form extends React.Component {
       'Internet of Things',
       'Mobile Development',
       'Virtual Reality',
-      'Biochemical'
+      'Biochemical',
     ];
-    return industries.map((industry, i) => {
-      return (
-        <div key={`industry-${i}`} className="form-check">
-          <label className="form-check-label" htmlFor={`industry-${i}`}>
-            {industry}
-            <input
-              className="form-check-input"
-              type="radio"
-              name="industry"
-              id={`industry-${i}`}
-              value={industry}
-              onClick={() => this.setState({ industry })}
-            />
-            <span className="circle">
-              <span className="check" />
-            </span>
-          </label>
-        </div>
-      );
-    });
+    return industries.map((industry, i) => (
+      <div key={shortId.generate()} className="form-check">
+        <label className="form-check-label" htmlFor={`industry-${i}`}>
+          {industry}
+          <input
+            className="form-check-input"
+            type="radio"
+            name="industry"
+            id={`industry-${i}`}
+            value={industry}
+            onClick={() => this.setState({ industry })}
+          />
+          <span className="circle">
+            <span className="check" />
+          </span>
+        </label>
+      </div>
+    ));
   }
 
   populateFrontEndFrameworks() {
     const frontEndFrameworks = ['React', 'Angular', 'Vue', 'AngularJS', 'Backbone'];
-    return frontEndFrameworks.map((frontEndFramework, i) => {
-      return (
-        <div key={`frontEndFramework-${i}`} className="form-check">
-          <label className="form-check-label" htmlFor={`frontEndFramework-${i}`}>
-            {frontEndFramework}
-            <input
-              className="form-check-input"
-              type="radio"
-              name="frontEndFramework"
-              id={`frontEndFramework-${i}`}
-              value={frontEndFramework}
-              onClick={() => this.setState({ frontEndFramework })}
-            />
-            <span className="circle">
-              <span className="check" />
-            </span>
-          </label>
-        </div>
-      );
-    });
+    return frontEndFrameworks.map((frontEndFramework, i) => (
+      <div key={shortId.generate()} className="form-check">
+        <label className="form-check-label" htmlFor={`frontEndFramework-${i}`}>
+          {frontEndFramework}
+          <input
+            className="form-check-input"
+            type="radio"
+            name="frontEndFramework"
+            id={`frontEndFramework-${i}`}
+            value={frontEndFramework}
+            onClick={() => this.setState({ frontEndFramework })}
+          />
+          <span className="circle">
+            <span className="check" />
+          </span>
+        </label>
+      </div>
+    ));
   }
 
   populateDatabases() {
     const databases = ['PostgreSQL', 'Cassandra', 'MySQL', 'MongoDB', 'Redis', 'MariaDB'];
-    return databases.map((database, i) => {
-      return (
-        <div key={`database-${i}`} className="form-check">
-          <label className="form-check-label" htmlFor={`database-${i}`}>
-            {database}
-            <input
-              className="form-check-input"
-              type="radio"
-              name="database"
-              id={`database-${i}`}
-              value={database}
-              onClick={() => this.setState({ database })}
-            />
-            <span className="circle">
-              <span className="check" />
-            </span>
-          </label>
-        </div>
-      );
-    });
+    return databases.map((database, i) => (
+      <div key={shortId.generate()} className="form-check">
+        <label className="form-check-label" htmlFor={`database-${i}`}>
+          {database}
+          <input
+            className="form-check-input"
+            type="radio"
+            name="database"
+            id={`database-${i}`}
+            value={database}
+            onClick={() => this.setState({ database })}
+          />
+          <span className="circle">
+            <span className="check" />
+          </span>
+        </label>
+      </div>
+    ));
   }
 
   // eslint-disable-next-line class-methods-use-this
   handleSubmit(event) {
     event.preventDefault();
+    const { errorMessage, generateLetter } = this.props;
     const {
       company,
       greeting,
@@ -130,7 +125,7 @@ class Form extends React.Component {
       roleAppend,
       industry,
       frontEndFramework,
-      database
+      database,
     } = this.state;
     let missing = '';
     if (company === '') {
@@ -151,7 +146,7 @@ class Form extends React.Component {
       missing = 'Database';
     }
     if (missing !== '') {
-      this.props.errorMessage('Please choose your ' + missing);
+      errorMessage(`Please choose your ${missing}`);
       return;
     }
     let fixedGreeting = greeting;
@@ -161,13 +156,13 @@ class Form extends React.Component {
       fixedGreeting = addresseeName;
     }
     window.scrollTo(0, 0);
-    this.props.generateLetter({
+    generateLetter({
       company,
       greeting: fixedGreeting,
       role: `${role} ${roleAppend}`,
       industry,
       frontEndFramework,
-      database
+      database,
     });
   }
 
@@ -215,7 +210,7 @@ class Form extends React.Component {
                 <div className="form-check">
                   <label className="form-check-label" htmlFor="companyTeam">
                     {company === '' ? '[Company]' : company}
-                    's Team
+                    &#39;s Team
                     <input
                       className="form-check-input"
                       type="radio"
@@ -347,5 +342,10 @@ class Form extends React.Component {
     );
   }
 }
+
+Form.propTypes = {
+  errorMessage: PropTypes.func.isRequired,
+  generateLetter: PropTypes.func.isRequired,
+};
 
 export default Form;

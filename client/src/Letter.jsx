@@ -1,11 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import shortId from 'shortid';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 const Letter = ({ letter }) => (
   <div className="card">
     <div className="card-body">
-      {letter.split('\n').map((paragraph, i) => (
-        <div key={`pg-${i}`}>
+      {letter.split('\n').map(paragraph => (
+        <div key={shortId.generate()}>
           {paragraph}
           <br />
         </div>
@@ -23,4 +25,9 @@ const Letter = ({ letter }) => (
     </div>
   </div>
 );
+
+Letter.propTypes = {
+  letter: PropTypes.string.isRequired,
+};
+
 export default Letter;

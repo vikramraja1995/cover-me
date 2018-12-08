@@ -10,12 +10,12 @@ class App extends React.Component {
     this.state = {
       letter: '',
       error: '',
-      auth: null
+      auth: null,
     };
     this.loginUser = this.loginUser.bind(this);
     this.generateLetter = this.generateLetter.bind(this);
     this.errorMessage = this.errorMessage.bind(this);
-    fetch('/auth/check').then(res => {
+    fetch('/auth/check').then((res) => {
       if (res.status === 200) {
         this.setState({ auth: true });
       } else {
@@ -28,8 +28,8 @@ class App extends React.Component {
     fetch('/auth/login', {
       method: 'POST',
       body: JSON.stringify(data),
-      headers: { 'Content-Type': 'application/json' }
-    }).then(res => {
+      headers: { 'Content-Type': 'application/json' },
+    }).then((res) => {
       if (res.status === 200) {
         this.errorMessage('');
         this.setState({ auth: true });
@@ -44,7 +44,7 @@ class App extends React.Component {
     fetch('/api/generate', {
       method: 'POST',
       body: JSON.stringify(data),
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'application/json' },
     })
       .then(raw => raw.json())
       .then(({ letter }) => {
@@ -60,35 +60,35 @@ class App extends React.Component {
 
   render() {
     const { error, letter, auth } = this.state;
-    return (
-      <div>
-        {error === '' ? (
-          ''
-        ) : (
+
+    if (error) {
+      return (
+        <div>
           <div className="alert alert-danger" role="alert">
             {/* TODO: Remove lower margin, look into fading in, stick to top */}
             {error}
           </div>
-        )}
-        {auth === false ? (
-          <Login loginUser={this.loginUser} />
-        ) : auth === true ? (
-          <div>
-            <Navigation />
-            <div className="container">
-              <div className="row">
-                <div className="col">
-                  <Form generateLetter={this.generateLetter} errorMessage={this.errorMessage} />
-                </div>
-                <div className="col">
-                  <Letter letter={letter} />
-                </div>
+        </div>
+      );
+    }
+    if (!auth) {
+      return <Login loginUser={this.loginUser} />;
+    }
+    return (
+      <div>
+        <div>
+          <Navigation />
+          <div className="container">
+            <div className="row">
+              <div className="col">
+                <Form generateLetter={this.generateLetter} errorMessage={this.errorMessage} />
+              </div>
+              <div className="col">
+                <Letter letter={letter} />
               </div>
             </div>
           </div>
-        ) : (
-          ''
-        )}
+        </div>
       </div>
     );
   }

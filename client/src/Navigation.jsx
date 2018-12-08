@@ -1,7 +1,6 @@
 import React from 'react';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 
-const Letter = ({ letter }) => (
+const Navigation = () => (
   <nav className="navbar sticky-top bg-primary rounded-0">
     {/* Page Name */}
     <a className="navbar-brand ml-3" href="#">
@@ -12,7 +11,8 @@ const Letter = ({ letter }) => (
     <ul className="navbar-nav mr-auto">
       <li className="nav-item active">
         <a className="nav-link" href="#">
-          Home <span className="sr-only">(current)</span>
+          Home
+          <span className="sr-only">(current)</span>
         </a>
       </li>
     </ul>
@@ -33,4 +33,4 @@ const Letter = ({ letter }) => (
     </ul>
   </nav>
 );
-export default Letter;
+export default Navigation;

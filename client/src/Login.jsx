@@ -1,18 +1,20 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       email: '',
-      password: ''
+      password: '',
     };
     this.handleLogin = this.handleLogin.bind(this);
   }
 
   handleLogin(event) {
+    const { loginUser } = this.props;
     event.preventDefault();
-    this.props.loginUser(this.state);
+    loginUser(this.state);
   }
 
   render() {
@@ -23,6 +25,7 @@ class Login extends React.Component {
             <h3>Login</h3>
             {/* Email Address */}
             <div className="form-group row">
+              {/* eslint-disable-next-line */}
               <label htmlFor="email" className="bmd-label-floating col-sm-8">
                 Email Address
               </label>
@@ -34,13 +37,14 @@ class Login extends React.Component {
                   onChange={e => this.setState({ email: e.target.value })}
                 />
                 <small id="emailHelp" className="form-text text-muted">
-                  We'll never share your email with anyone else (But we'll spam the hell out of it
-                  like every other website).
+                  We&#39;ll never share your email with anyone else (But we&#39;ll spam the hell out
+                  of it like every other website).
                 </small>
               </div>
             </div>
             {/* Password */}
             <div className="form-group row">
+              {/* eslint-disable-next-line */}
               <label htmlFor="password" className="bmd-label-floating col-sm-8">
                 Password
               </label>
@@ -67,5 +71,9 @@ class Login extends React.Component {
     );
   }
 }
+
+Login.propTypes = {
+  loginUser: PropTypes.func.isRequired,
+};
 
 export default Login;
