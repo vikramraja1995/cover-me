@@ -63,6 +63,14 @@ class Login extends React.Component {
                 <button type="submit" className="btn btn-primary" onClick={this.handleLogin}>
                   Login
                 </button>
+                <br />
+                <a href="/auth/google">
+                  <img
+                    src="./assets/img/google/btn_google_signin_dark_normal_web@2x.png"
+                    alt="google-login"
+                    className="img-fluid"
+                  />
+                </a>
               </div>
             </div>
           </form>
