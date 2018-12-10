@@ -11,7 +11,6 @@ passport.use(
     },
     (accessToken, refreshToken, profile, done) => {
       const email = profile.emails[0].value;
-      // User.findOrCreate({ googleId: profile.id }, (err, user) => done(err, user));
       User.findOne({ email }, (err, user) => {
         if (err) {
           done(err);
@@ -20,7 +19,7 @@ passport.use(
         if (user) {
           // If user with email exists but hasn't connected their google account
           if (user.googleId !== profile.id) {
-            User.update(user, { $set: { googleId: profile.id } })
+            User.update({ email }, { $set: { googleId: profile.id } })
               .then((savedUser) => {
                 done(null, savedUser);
               })
