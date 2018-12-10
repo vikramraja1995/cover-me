@@ -1,12 +1,11 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const envVars = require('../env_variables');
 /* --------------------------------------------------------------------------------------------- */
 const saltRounds = 8; // Set the bcrypt work factor
 
 // Set up Mongoose Connection
 mongoose.connect(
-  `mongodb://${envVars.mongoIP}/cover-me`,
+  `mongodb://${process.env.MONGO_IP}/cover-me`,
   { useNewUrlParser: true },
 );
 const db = mongoose.connection;

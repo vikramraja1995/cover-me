@@ -1,4 +1,4 @@
 node_modules
 build/
 
-env_variables.js
+.env
