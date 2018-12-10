@@ -47,7 +47,7 @@ require('../auth/google');
 // Handle Google SSO
 app.get(
   '/auth/google',
-  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }),
+  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login.email'] }),
 );
 
 app.get(
