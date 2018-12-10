@@ -24,6 +24,7 @@ passport.use(
                 done(null, savedUser);
               })
               .catch(err2 => console.err(err2));
+            return;
           }
           done(null, user);
           return;
