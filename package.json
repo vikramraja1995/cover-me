@@ -48,7 +48,7 @@
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-prettier": "^2.6.2",
     "eslint-plugin-react": "^7.11.1",
-    "nodemon": "^1.18.4",
+    "nodemon": "^1.18.7",
     "prettier": "^1.14.2",
     "webpack": "^2.2.1"
   }
