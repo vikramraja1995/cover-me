@@ -15,7 +15,7 @@ app.use((req, res, next) => {
   res.header('Access-Control-Expose-Headers', 'Content-Length');
   res.header(
     'Access-Control-Allow-Headers',
-    'Accept, Authorization, Content-Type, X-Requested-With, Range'
+    'Accept, Authorization, Content-Type, X-Requested-With, Range',
   );
   if (req.method === 'OPTIONS') {
     return res.send(200);
@@ -34,9 +34,9 @@ app.use(
     store: new MongoStore({ mongooseConnection: db.db }),
     cookie: {
       secure: false,
-      maxAge: 86400000 // 1 day
-    }
-  })
+      maxAge: 86400000, // 1 day
+    },
+  }),
 );
 app.use(passport.initialize());
 app.use(passport.session());
@@ -56,7 +56,7 @@ const ensureLoggedIn = () => (req, res, next) => {
   if (!req.isAuthenticated || !req.isAuthenticated()) {
     res.status(401).send({
       success: false,
-      message: 'You need to be authenticated to access this page!'
+      message: 'You need to be authenticated to access this page!',
     });
   } else {
     next();
@@ -70,15 +70,15 @@ app.get('/auth/check', ensureLoggedIn(), (req, res, next) => {
 
 // Get the template from DB, fill it with user data, save the cover letter in the db and return it
 app.post('/api/generate', (req, res) => {
-  db.getTemplate().then(data => {
+  db.getTemplate().then((data) => {
     let { template } = data;
-    for (let prop in req.body) {
+    Object.keys(req.body).forEach((prop) => {
       template = template.replace(`{${prop}}`, req.body[prop]);
-    }
+    });
     res.send({ letter: template });
   });
 });
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Listening on ${port}...`));
+app.listen(port, () => console.log(`Listening on ${port}...`)); // eslint-disable-line no-console
 /* --------------------------------------------------------------------------------------------- */

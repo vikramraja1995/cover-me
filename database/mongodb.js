@@ -7,17 +7,17 @@ const saltRounds = 8; // Set the bcrypt work factor
 // Set up Mongoose Connection
 mongoose.connect(
   `mongodb://${envVars.mongoIP}/cover-me`,
-  { useNewUrlParser: true }
+  { useNewUrlParser: true },
 );
 const db = mongoose.connection;
 mongoose.Promise = Promise;
-db.on('error', e => console.error('Connection Error:', e));
+db.on('error', e => console.error('Connection Error:', e)); // eslint-disable-line no-console
 /* --------------------------------------------------------------------------------------------- */
 
 // Set up Schemas
 
 const coverLetterSchema = new mongoose.Schema({
-  letter: String
+  letter: String,
 });
 
 const userSchema = new mongoose.Schema(
@@ -26,14 +26,14 @@ const userSchema = new mongoose.Schema(
     username: String,
     email: String,
     password: String,
-    coverLetters: [mongoose.Schema.Types.Mixed]
+    coverLetters: [mongoose.Schema.Types.Mixed],
   },
-  { strict: false }
+  { strict: false },
 );
 
 const templateSchema = new mongoose.Schema({
   name: String,
-  template: String
+  template: String,
 });
 /* --------------------------------------------------------------------------------------------- */
 
@@ -53,20 +53,18 @@ const Template = mongoose.model('template', templateSchema);
 /* --------------------------------------------------------------------------------------------- */
 
 // DB Querying Functions
-const addCoverLetter = (username, coverLetter) =>
-  User.findOne({ username }).then(doc => {
-    doc.coverLetters.push(coverLetter);
-  });
+const addCoverLetter = (username, coverLetter) => User.findOne({ username }).then((doc) => {
+  doc.coverLetters.push(coverLetter);
+});
 
-const getCoverLetter = (username, coverLetter) =>
-  User.findOne({ 'coverLetters.name': coverLetter }).where({ username });
+const getCoverLetter = (username, coverLetter) => User.findOne({ 'coverLetters.name': coverLetter }).where({ username });
 
 const getCoverLetterList = username => User.find({ username }, 'coverLetters.name');
 
 const addUser = (name, username) => {
   const user = new User({
     name,
-    username
+    username,
   });
   return user.save();
 };
@@ -86,5 +84,5 @@ module.exports = {
   addUser,
   getTemplate,
   User,
-  db
+  db,
 };

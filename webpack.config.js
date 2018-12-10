@@ -7,10 +7,10 @@ module.exports = {
   entry: `${SRC_DIR}/index.jsx`,
   output: {
     path: DIST_DIR,
-    filename: 'bundle.js'
+    filename: 'bundle.js',
   },
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx'],
   },
   module: {
     loaders: [
@@ -22,15 +22,15 @@ module.exports = {
           presets: ['env', 'react'],
           env: {
             test: {
-              presets: ['env', 'react']
-            }
-          }
-        }
-      }
-    ]
+              presets: ['env', 'react'],
+            },
+          },
+        },
+      },
+    ],
   },
   stats: {
-    colors: true
+    colors: true,
   },
-  devtool: 'source-map'
+  devtool: 'source-map',
 };

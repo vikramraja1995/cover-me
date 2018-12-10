@@ -7,28 +7,32 @@ passport.use(
   new LocalStrategy(
     {
       usernameField: 'email',
-      passwordField: 'password'
+      passwordField: 'password',
     },
     (email, password, done) => {
       User.findOne({ email }, (err, user) => {
         if (err) {
-          return done(err);
+          done(err);
+          return;
         }
         if (!user) {
-          return done(null, false, { message: 'Incorrect email' });
+          done(null, false, { message: 'Incorrect email' });
+          return;
         }
         user.validatePassword(password, user.password, (error, res) => {
           if (error) {
-            return done(error);
+            done(error);
+            return;
           }
           if (res === true) {
-            return done(null, user);
+            done(null, user);
+            return;
           }
-          return done(null, false, { message: 'Incorrect password' });
+          done(null, false, { message: 'Incorrect password' });
         });
       });
-    }
-  )
+    },
+  ),
 );
 
 passport.use(
@@ -36,15 +40,17 @@ passport.use(
   new LocalStrategy(
     {
       usernameField: 'email',
-      passwordField: 'password'
+      passwordField: 'password',
     },
     (email, password, done) => {
       User.findOne({ email }, (err, user) => {
         if (err) {
-          return done(err);
+          done(err);
+          return;
         }
         if (user) {
-          return done(null, false, { message: 'User with that email already exists!' });
+          done(null, false, { message: 'User with that email already exists!' });
+          return;
         }
         const newUser = new User();
         newUser.email = email;
@@ -55,14 +61,14 @@ passport.use(
           newUser.password = res;
           newUser
             .save()
-            .then(savedUser => {
+            .then((savedUser) => {
               done(null, savedUser);
             })
-            .catch(err2 => console.err(err2));
+            .catch(err2 => console.err(err2)); // eslint-disable-line no-console
         });
       });
-    }
-  )
+    },
+  ),
 );
 
 passport.serializeUser((user, done) => {
