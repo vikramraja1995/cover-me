@@ -68,6 +68,7 @@ class Login extends React.Component {
                   <img
                     src="./assets/img/google/btn_google_signin_dark_normal_web@2x.png"
                     alt="google-login"
+                    className="img-fluid"
                   />
                 </a>
               </div>
