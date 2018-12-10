@@ -41,6 +41,7 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+require('../auth/session');
 require('../auth/local');
 require('../auth/google');
 
