@@ -11,7 +11,7 @@ passport.use(
     },
     (accessToken, refreshToken, profile, done) => {
       console.log(profile);
-      console.log(JSON.stringify(profile));
+      console.log(profile.emails, profile.email);
       // User.findOrCreate({ googleId: profile.id }, (err, user) => done(err, user));
       User.findOne({ email: profile.email }, (err, user) => {
         if (err) {
