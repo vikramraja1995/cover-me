@@ -10,10 +10,9 @@ passport.use(
       callbackURL: 'https://coverme.vikramraja.me/auth/google/callback',
     },
     (accessToken, refreshToken, profile, done) => {
-      console.log(profile);
-      console.log(profile.emails, profile.email);
+      const email = profile.emails[0].value;
       // User.findOrCreate({ googleId: profile.id }, (err, user) => done(err, user));
-      User.findOne({ email: profile.email }, (err, user) => {
+      User.findOne({ email }, (err, user) => {
         if (err) {
           done(err);
           return;
@@ -33,7 +32,7 @@ passport.use(
         // Create user if doesn't exist
         const newUser = new User();
         newUser.googleId = profile.id;
-        newUser.email = profile.email;
+        newUser.email = email;
         newUser
           .save()
           .then((savedUser) => {
