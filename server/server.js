@@ -41,7 +41,22 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-require('../config/passport');
+require('../auth/local');
+require('../auth/google');
+
+// Handle Google SSO
+app.get(
+  '/auth/google',
+  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }),
+);
+
+app.get(
+  '/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  (req, res) => {
+    res.redirect('/');
+  },
+);
 
 // Handle login requests
 app.post('/auth/login', passport.authenticate('local-login'), (req, res) => {
