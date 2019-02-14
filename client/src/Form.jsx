@@ -14,6 +14,10 @@ class Form extends React.Component {
       industry: '',
       frontEndFramework: '',
       database: '',
+      roles: this.populateRoles(),
+      industries: this.populateIndustry(),
+      databases: this.populateDatabases(),
+      frameworks: this.populateFrontEndFrameworks(),
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -167,7 +171,9 @@ class Form extends React.Component {
   }
 
   render() {
-    const { company } = this.state;
+    const {
+      company, roles, industries, databases, frameworks,
+    } = this.state;
     return (
       <div className="border-right border-light">
         <form action="">
@@ -256,7 +262,7 @@ class Form extends React.Component {
             <div className="row">
               <legend className="col-form-label col-sm-3 pt-0">Role 1</legend>
               {/*  Roles */}
-              <div className="col-sm-5">{this.populateRoles()}</div>
+              <div className="col-sm-5">{roles}</div>
             </div>
           </fieldset>
 
@@ -307,7 +313,7 @@ class Form extends React.Component {
             <div className="row">
               <legend className="col-form-label col-sm-3 pt-0">Industry</legend>
               {/*  Industries */}
-              <div className="col-sm-5">{this.populateIndustry()}</div>
+              <div className="col-sm-5">{industries}</div>
             </div>
           </fieldset>
 
@@ -316,7 +322,7 @@ class Form extends React.Component {
             <div className="row">
               <legend className="col-form-label col-sm-3 pt-0">Front-End Framework</legend>
               {/*  Front-End Frameworks */}
-              <div className="col-sm-5">{this.populateFrontEndFrameworks()}</div>
+              <div className="col-sm-5">{frameworks}</div>
             </div>
           </fieldset>
 
@@ -325,7 +331,7 @@ class Form extends React.Component {
             <div className="row">
               <legend className="col-form-label col-sm-3 pt-0">Database</legend>
               {/*  Database */}
-              <div className="col-sm-5">{this.populateDatabases()}</div>
+              <div className="col-sm-5">{databases}</div>
             </div>
           </fieldset>
 
