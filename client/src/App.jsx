@@ -60,36 +60,38 @@ class App extends React.Component {
 
   render() {
     const { error, letter, auth } = this.state;
+    let view = <Login loginUser={this.loginUser} />;
 
-    if (error) {
-      return (
+    if (auth === true) {
+      view = (
         <div>
-          <div className="alert alert-danger" role="alert">
-            {/* TODO: Remove lower margin, look into fading in, stick to top */}
-            {error}
-          </div>
-        </div>
-      );
-    }
-    if (!auth) {
-      return <Login loginUser={this.loginUser} />;
-    }
-    return (
-      <div>
-        <div>
-          <Navigation />
-          <div className="container">
-            <div className="row">
-              <div className="col">
-                <Form generateLetter={this.generateLetter} errorMessage={this.errorMessage} />
-              </div>
-              <div className="col">
-                <Letter letter={letter} />
+          <div>
+            <Navigation />
+            <div className="container">
+              <div className="row">
+                <div className="col">
+                  <Form generateLetter={this.generateLetter} errorMessage={this.errorMessage} />
+                </div>
+                <div className="col">
+                  <Letter letter={letter} />
+                </div>
               </div>
             </div>
           </div>
         </div>
+      );
+    }
+
+    return error ? (
+      <div>
+        <div className="alert alert-danger m-0" role="alert">
+          {/* TODO: Remove lower margin, look into fading in, stick to top */}
+          {error}
+        </div>
+        {view}
       </div>
+    ) : (
+      view
     );
   }
 }
