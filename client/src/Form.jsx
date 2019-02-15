@@ -21,7 +21,7 @@ class Form extends React.Component {
   // TODO: This function is stubbed for now. Modify to get entries from the database.
   getFormEntries() {
     const rawEntries = {
-      Greeting: ['Hiring Manager', "[Company's] Team", 'Input Tag'],
+      Greeting: ['Hiring Manager', '%input%'],
       'Role 1': ['Software', 'Javascript', 'Full-Stack', 'Front-End', 'Back-End'],
       'Role 2': ['Developer', 'Engineer'],
       Industry: [
@@ -48,17 +48,18 @@ class Form extends React.Component {
 
   populateForm() {
     const { rawEntries } = this.state;
-    const keys = Object.keys(rawEntries);
+    const fields = Object.keys(rawEntries);
     const formEntries = [];
-    for (let i = 0; i < keys.length; i += 1) {
-      const key = keys[i];
-      const values = rawEntries[key];
-      const valueEntries = values.map(this.populateValues.bind(this, key)); // Make sure populateValues() has access to key
+    for (let i = 0; i < fields.length; i += 1) {
+      const field = fields[i];
+      const options = rawEntries[field];
+      // Make sure populateValues() has access to field
+      const optionEntries = options.map(this.populateValues.bind(this, field));
       formEntries.push(
         <fieldset key={shortId.generate()} className="form-group">
           <div className="row">
-            <legend className="col-form-label col-sm-3 pt-0">{key}</legend>
-            <div className="col-sm-5">{valueEntries}</div>
+            <legend className="col-form-label col-sm-3 pt-0">{field}</legend>
+            <div className="col-sm-5">{optionEntries}</div>
           </div>
         </fieldset>,
       );
@@ -66,82 +67,65 @@ class Form extends React.Component {
     this.setState({ formEntries });
   }
 
-  populateValues(key, value, i) {
+  populateValues(field, option, i) {
+    const input = option === '%input%';
     return (
       <div key={shortId.generate()} className="form-check">
-        <label className="form-check-label" htmlFor={`${key}-${i}`}>
-          {value}
+        <label className="form-check-label" htmlFor={`${field}-${i}`}>
+          {input ? '' : option}
           <input
             className="form-check-input"
             type="radio"
-            name={value}
-            id={`${key}-${i}`}
-            value={value}
+            name={field}
+            id={`${field}-${i}`}
+            value={option}
             onClick={() => {
               const { selected } = this.state;
-              selected[key] = value;
+              const customIn = document.getElementById(`${field}-custom-${i}`);
+              selected[field] = customIn === null ? option : customIn.value;
               this.setState({ selected });
             }}
           />
           <span className="circle">
             <span className="check" />
           </span>
+          {/* Add custom input field if %input% is detected as a option */}
+          {input ? (
+            <input
+              id={`${field}-custom-${i}`}
+              className="form-control"
+              type="text"
+              placeholder="Custom"
+              onChange={(e) => {
+                const { selected } = this.state;
+                selected[field] = e.target.value;
+                this.setState({ selected });
+              }}
+              onClick={() => document.getElementById(`${field}-${i}`).click()}
+            />
+          ) : (
+            ''
+          )}
         </label>
       </div>
     );
   }
 
-  // TODO: Properly handle submitted form
   handleSubmit(event) {
     event.preventDefault();
     const { errorMessage, generateLetter } = this.props;
-    const { selected } = this.state;
+    const { company, selected } = this.state;
 
-    const keys = Object.keys(selected);
-    for (let i = 0; i < keys.length; i += 1) {
-      const key = keys[i];
-      if (selected[key] === '') {
-        errorMessage(`Please choose your ${key}`);
-        break;
+    const fields = Object.keys(selected);
+    for (let i = 0; i < fields.length; i += 1) {
+      const field = fields[i];
+      if (selected[field] === '') {
+        errorMessage(`Please choose your ${field}`);
+        return;
       }
     }
-
-    // if (company === '') {
-    //   missing = 'Company';
-    // } else if (greeting === '') {
-    //   missing = 'Greeting';
-    // } else if (greeting === 'custom' && addresseeName === '') {
-    //   missing = 'Addressee name';
-    // } else if (role === '') {
-    //   missing = 'Role 1';
-    // } else if (roleAppend === '') {
-    //   missing = 'Role 2';
-    // } else if (industry === '') {
-    //   missing = 'Industry';
-    // } else if (frontEndFramework === '') {
-    //   missing = 'Front-End Framework';
-    // } else if (database === '') {
-    //   missing = 'Database';
-    // }
-    // if (missing !== '') {
-    //   errorMessage(`Please choose your ${missing}`);
-    //   return;
-    // }
-    // let fixedGreeting = greeting;
-    // if (greeting === 'team') {
-    //   fixedGreeting = `${company}'s  Team`;
-    // } else if (greeting === 'custom') {
-    //   fixedGreeting = addresseeName;
-    // }
     window.scrollTo(0, 0);
-    // generateLetter({
-    //   company,
-    //   greeting: fixedGreeting,
-    //   role: `${role} ${roleAppend}`,
-    //   industry,
-    //   frontEndFramework,
-    //   database,
-    // });
+    generateLetter({ company, selected });
   }
 
   render() {
@@ -157,7 +141,7 @@ class Form extends React.Component {
                 className="form-control"
                 id="companyName"
                 placeholder="Company's Name"
-                onChange={e => this.setState({ company: e.target.value })}
+                onChange={e => this.setState({ company: e.target.option })}
               />
             </div>
           </div>
