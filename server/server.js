@@ -90,15 +90,18 @@ app.get('/auth/check', ensureLoggedIn(), (req, res, next) => {
   next();
 });
 
+// TODO: Stubbed for testing Front end. Needs to be fixed after some database reworking.
 // Get the template from DB, fill it with user data, save the cover letter in the db and return it
 app.post('/api/generate', (req, res) => {
-  db.getTemplate().then((data) => {
-    let { template } = data;
-    Object.keys(req.body).forEach((prop) => {
-      template = template.replace(`{${prop}}`, req.body[prop]);
-    });
-    res.send({ letter: template });
-  });
+  // db.getTemplate().then((data) => {
+  //   let { template } = data;
+  //   Object.keys(req.body).forEach((prop) => {
+  //     template = template.replace(`{${prop}}`, req.body[prop]);
+  //   });
+  //   res.send({ letter: template });
+  // });
+  const letter = 'success!';
+  res.send({ letter });
 });
 
 const port = process.env.PORT || 3000;
