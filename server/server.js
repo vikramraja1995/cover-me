@@ -90,18 +90,48 @@ app.get('/auth/check', ensureLoggedIn(), (req, res, next) => {
   next();
 });
 
+// Get a template's available options using the given user Id and template Id
+app.get('/api/template', (req, res) => {
+  const { userId, templateId } = req;
+  db.getTemplate(userId, templateId)
+    .then((data) => {
+      const { availableOptions } = data;
+      res.send({ availableOptions });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(500);
+    });
+});
+
 // TODO: Stubbed for testing Front end. Needs to be fixed after some database reworking.
 // Get the template from DB, fill it with user data, save the cover letter in the db and return it
 app.post('/api/generate', (req, res) => {
-  // db.getTemplate().then((data) => {
-  //   let { template } = data;
-  //   Object.keys(req.body).forEach((prop) => {
-  //     template = template.replace(`{${prop}}`, req.body[prop]);
-  //   });
-  //   res.send({ letter: template });
-  // });
-  const letter = 'success!';
-  res.send({ letter });
+  const { username, templateId, savedOptions } = req.body;
+
+  db.addCoverLetter(username, savedOptions)
+    .then(() => {
+      db.getTemplateString(username, templateId)
+        .then((templateString) => {
+          if (templateString === null) {
+            res.send({ error: 'Template not found!' });
+          }
+          console.log(templateString);
+          let letter = templateString;
+          Object.keys(savedOptions).forEach((prop) => {
+            letter = letter.replace(`{${prop}}`, savedOptions[prop]);
+          });
+          res.send({ letter });
+        })
+        .catch((err) => {
+          console.log(err);
+          res.sendStatus(500);
+        });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(500);
+    });
 });
 
 const port = process.env.PORT || 3000;
