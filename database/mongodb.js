@@ -57,14 +57,14 @@ userSchema.methods.validatePassword = (password, hash, callback) => {
 
 // Set up Models
 const User = mongoose.model('user', userSchema);
-const Template = mongoose.model('template', templateSchema);
-const CoverLetter = mongoose.model('coverLetter', coverLetterSchema);
+const Template = mongoose.model('templates', templateSchema);
+const CoverLetter = mongoose.model('coverLetters', coverLetterSchema);
 /* --------------------------------------------------------------------------------------------- */
 
 // DB Querying Functions
 // Add a generated cover letter options to user's history
-const addCoverLetter = (username, data) => {
-  const coverLetter = new CoverLetter(data);
+const addCoverLetter = (username, savedOptions) => {
+  const coverLetter = new CoverLetter(savedOptions);
   const now = Date.now();
   coverLetter.dateCreated = now;
   coverLetter.dateModified = now;
@@ -101,9 +101,24 @@ const getTemplateList = username => User.findOne({ username }).then((res) => {
 });
 
 // Get available options for a given template belonging to a user
-const getTemplateOptions = (username, templateId) => User.findOne({ username })
-  .then(user => user.templates.findById(templateId))
-  .then(template => template.availableOptions);
+const getTemplate = (username, templateId) => User.findOne({ username }).then(({ templates }) => {
+  for (let i = 0; i < templates.length; i += 1) {
+    if (templates[i].id === templateId) {
+      return templates[i];
+    }
+  }
+  return null;
+});
+
+// Get available options for a given template belonging to a user
+const getTemplateOptions = (username, templateId) => getTemplate(username, templateId).then(
+  template => (template === null ? template : template.availableOptions),
+);
+
+// Get available options for a given template belonging to a user
+const getTemplateString = (username, templateId) => getTemplate(username, templateId).then(
+  template => (template === null ? template : template.template),
+);
 
 // Add a new template to the user's document
 const addTemplate = (username, data) => {
@@ -122,8 +137,10 @@ module.exports = {
   getCoverLetterList,
   getCoverLetter,
   addUser,
+  getTemplate,
   getTemplateList,
   getTemplateOptions,
+  getTemplateString,
   addTemplate,
   User,
   db,
